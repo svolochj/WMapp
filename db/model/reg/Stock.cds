@@ -1,15 +1,15 @@
 namespace WM.model.reg;
 
 using { cuid } from '@sap/cds/common';
-using { WM.model.cat.Product.Data as product } from '../cat/Product';
-using { WM.model.cat.UOM.Data as uom } from '../cat/UOM';
-using { WM.model.cat.Location.Data as location } from '../cat/Location';
+using { WM.model.cat.Product } from '../cat/Product';
+using { WM.model.cat.UOM } from '../cat/UOM';
+using { WM.model.cat.Location } from '../cat/Location';
 
 entity Stock : cuid {
-    Product     : Association to one product;
-    Location    : Association to one location;
+    Product     : Association to one Product;
+    Location    : Association to one Location;
     Quantity    : Decimal(17,3);
-    UOM         : Association to one uom;
+    UOM         : Association to one UOM;
 }
 
 annotate WM.model.reg.Stock with @(

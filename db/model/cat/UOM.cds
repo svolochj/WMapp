@@ -2,27 +2,32 @@ using {managed, sap.common.CodeList as CodeList} from '@sap/cds/common';
 
 namespace WM.model.cat;
 
-context UOM {
-    entity Data : managed, CodeList {
-        key id  : UUID;
-    }
+// @cds.odata.valuelist
+entity UOM : managed, CodeList {
+    key id  : UUID;
 }
 
-annotate UOM.Data with @(
+annotate UOM with @(
+
+    cds.odata.valuelist,
+
     UI: {
+    
+        Identification: [{ Value: id } ],
+    
         LineItem  : [
             {Value:id,      Label:'ID'},
             {Value:name,    Label:'Name'},
             {Value:descr,   Label:'Description'} 
         ],
     
-    HeaderInfo : {
-        $Type          : 'UI.HeaderInfoType',
-        TypeName       : 'UOM',
-        TypeNamePlural : 'UOM',
-        Title          : {Value : name},
-        Description    : {Value : descr}
-    },
+        HeaderInfo : {
+            $Type          : 'UI.HeaderInfoType',
+            TypeName       : 'UOM',
+            TypeNamePlural : 'UOM',
+            Title          : {Value : name},
+            Description    : {Value : descr}
+        },
 
     HeaderFacets  : [
         {
@@ -68,4 +73,22 @@ annotate UOM.Data with @(
     }
 
     },
-);
+)
+{
+    name @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'UOM',
+        SearchSupported : false,
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterOut',
+                LocalDataProperty : 'id', // UOM_id - due to association within the model
+                ValueListProperty:  'id'
+            },
+            {   
+                $Type : 'Common.ValueListParameterDisplayOnly',
+                ValueListProperty : 'name'
+            }            
+        ]
+    }
+};

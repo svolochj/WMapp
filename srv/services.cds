@@ -1,14 +1,16 @@
-using { WM.model.cat.Product.Data   as Product,
-        WM.model.cat.UOM.Data       as UOM_Data,
-        WM.model.cat.Location.Data  as Location,
-        WM.model.doc.docReceive     as docReceive,
-        WM.model.doc.docIssue       as docIssue,
-        WM.model.doc.docMovement    as docMovement,
-        WM.model.reg.Stock          as _Stock
+using { WM.model.cat.Product,
+        WM.model.cat.UOM as UOM_,
+        WM.model.cat.Location,
+        WM.model.doc.docReceive,
+        WM.model.doc.docIssue,
+        WM.model.doc.docMovement,
+        WM.model.reg.Stock as Stock_
          } from '../db/schema';
 
 
-service vsvappsrv {
+service vsvappsrv @(
+    path: '/api'
+) {
 
     //Vocabularies
     entity Products 
@@ -17,7 +19,7 @@ service vsvappsrv {
     
     entity UOM
         @( odata.draft.enabled : true )       
-        as select from UOM_Data;
+        as select from UOM_;
     entity Locations    
         @( odata.draft.enabled : true )    
         as select from Location;
@@ -39,7 +41,7 @@ service vsvappsrv {
     //Registry
     entity Stock 
         @(readonly:true)
-        as projection on _Stock;
+        as projection on Stock_;
     //     action calculateStock();
 
     function calculateStock() returns Integer;    

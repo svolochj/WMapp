@@ -1,48 +1,50 @@
 using { cuid, managed} from '@sap/cds/common';
 
-using { WM.model.cat.UOM.Data as UOM } from './UOM';
+using { WM.model.cat.UOM } from './UOM';
 
 namespace WM.model.cat;
 
-context Product  {
-    entity Data : cuid, managed {
-        Code        : String(23)        @(title : 'Code');
-        Name        : String(200)       @(title : 'Name');
+@cds.odata.valuelist
+entity Product: cuid, managed {
+    Code        : String(23)                @(title : 'Code') @mandatory;
+    Name        : String(200)               @(title : 'Name') @mandatory;
 
-        Description : String            @(title : 'Description');
+    Description : String                    @(title : 'Description');
 
-        UOM         : Association to one UOM
-                                        @(title : 'UOM');    
-    }
+    UOM         : Association to one UOM    @(title : 'UOM') @mandatory;    
 }
 
-annotate Product.Data with @(
+// annotate Product.Data.UOM with { @ValueListProperty: '' };
 
-     cds.odata.valuelist,
+annotate Product with @(
+
+    cds.odata.valuelist,
 
     UI : {
+
         Identification: [ {Value: ID} ],
-    LineItem   : [
-    {
-        ![@UI.Hidden],
-        Value : ID,
-        Label : 'ID'
-    },
-    {
-        $Type : 'UI.DataField',    
-        Value : Code,
-        Label : 'Code'
-    },
-    {
-        $Type : 'UI.DataField',     
-        Value : Name,
-        Label : 'Name'
-    },
-    {
-        $Type : 'UI.DataField', 
-        Value : UOM.name,
-        Label : 'UOM'
-    }
+
+        LineItem   : [
+        {
+            ![@UI.Hidden],
+            Value : ID,
+            Label : 'ID'
+        },
+        {
+            $Type : 'UI.DataField',    
+            Value : Code,
+            Label : 'Code'
+        },
+        {
+            $Type : 'UI.DataField',     
+            Value : Name,
+            Label : 'Name'
+        },
+        {
+            $Type : 'UI.DataField', 
+            Value : UOM.name,
+            Label : 'UOM'
+        }
     ],
 
     HeaderInfo : {
@@ -93,15 +95,14 @@ annotate Product.Data with @(
                 Value: Name
             },{
                 $Type:'UI.DataField',
-                Value: UOM_id,
-                Label: 'UOM',
+                Value: UOM.name,
+                Label: 'UOM'
+
+                // ![@Common.ValueListRelevantQualifiers] : [
+                //     'id','name'
+                // ]
                 
             },{
-                $Type:'UI.DataField',
-                Value: UOM_id,
-                Label: 'UOM ID'
-            },
-            {
                 Value: Description
             }
         ]
